@@ -23,18 +23,19 @@ eval_task = "wer"  # sim | wer
 lang = "zh"  # zh | en
 metalst = rel_path + f"/data/seedtts_testset/{lang}/meta.lst"  # seed-tts testset
 # gen_wav_dir = rel_path + f"/data/seedtts_testset/{lang}/wavs"  # ground truth wavs
-gen_wav_dir = "PATH_TO_GENERATED"  # generated wavs
-
+gen_wav_dir = "/workspace/flow_rl/F5-TTS/results/F5TTS_Base_500000/seedtts_test_zh/seed0_euler_nfe16_vocos_ss-1_cfg2.0_speed1.0"  # generated wavs
+gen_wav_dir = "/workspace/flow_rl/F5-TTS/results/F5TTS_Base_rl_800/seedtts_test_zh/seed0_euler_nfe16_vocos_ss-1_cfg2.0_speed1.0"
 
 # NOTE. paraformer-zh result will be slightly different according to the number of gpus, cuz batchsize is different
 #       zh 1.254 seems a result of 4 workers wer_seed_tts
 gpus = [0, 1, 2, 3, 4, 5, 6, 7]
 test_set = get_seed_tts_test(metalst, gen_wav_dir, gpus)
 
-local = False
+local = True
 if local:  # use local custom checkpoint dir
     if lang == "zh":
         asr_ckpt_dir = "../checkpoints/funasr"  # paraformer-zh dir under funasr
+        asr_ckpt_dir = "/workspace/download"
     elif lang == "en":
         asr_ckpt_dir = "../checkpoints/Systran/faster-whisper-large-v3"
 else:

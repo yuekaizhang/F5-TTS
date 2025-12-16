@@ -13,8 +13,8 @@ from einops import rearrange
 from ema_pytorch import EMA
 from f5_tts.model import CFM, DiT
 from f5_tts.model.dataset import DynamicBatchSampler, collate_fn
-from f5_tts.model.utils import (default, exists, get_tokenizer,
-                                load_checkpoint, mask_from_start_end_indices)
+from f5_tts.model.utils import (default, exists, get_tokenizer, mask_from_start_end_indices)
+from f5_tts.infer.utils_infer import load_checkpoint
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import LinearLR, SequentialLR
 from torch.utils.data import DataLoader, Dataset, SequentialSampler
@@ -42,6 +42,7 @@ def load_model(repo_name, exp_name, model_cls, model_cfg, ckpt_step):
     )
     ckpt_path = f"ckpts/{exp_name}/model_{ckpt_step}.pt"  # .pt | .safetensors
     vocab_char_map, vocab_size = get_tokenizer("Emilia_ZH_EN", "pinyin")
+    vocab_char_map, vocab_size = get_tokenizer("WenetSpeech4TTS_Basic", "pinyin")
     target_sample_rate = 24000
     n_mel_channels = 100
     hop_length = 256
@@ -97,7 +98,7 @@ class GRPOTrainer():
             log_with="wandb",
             kwargs_handlers=[ddp_kwargs],
             gradient_accumulation_steps=grad_accumulation_steps,
-            **accelerate_kwargs
+            # **accelerate_kwargs
         )
 
         if exists(wandb_resume_id):
@@ -128,7 +129,7 @@ class GRPOTrainer():
             self.ema_model = EMA(
                 model,
                 include_online_model=False,
-                **ema_kwargs
+                # **ema_kwargs
             )
 
             self.ema_model.to(self.accelerator.device)
@@ -158,7 +159,7 @@ class GRPOTrainer():
             dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4
         )
         ema_model = load_model("F5-TTS", "F5TTS_ref", DiT, F5TTS_model_cfg, "last")
-        self.ref_model = ema_model
+        self.ref_model = ema_model.to(torch.float32)
         self.ref_model.eval()
         self.ref_model = self.accelerator.prepare(self.ref_model)
 

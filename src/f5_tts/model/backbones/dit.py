@@ -219,7 +219,10 @@ class DiT(nn.Module):
             time = repeat(time, ' -> b', b=batch)
 
         # t: conditioning time, c: context (text + masked cond audio), x: noised input audio
+        # print dtype of time
+        # print(time.dtype)
         t = self.time_embed(time)
+        # breakpoint()
         text_embed = self.text_embed(text, seq_len, drop_text=drop_text)
         x = self.input_embed(x, cond, text_embed, drop_audio_cond=drop_audio_cond)
 

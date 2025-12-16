@@ -5,7 +5,7 @@ from f5_tts.infer.utils_infer import load_vocoder
 from rl import utils
 
 
-vocos = load_vocoder(vocoder_name="vocos")
+vocos = load_vocoder(vocoder_name="vocos").to(torch.device("cpu"))
 
 
 def get_reward(gen_mel, trg_mel):

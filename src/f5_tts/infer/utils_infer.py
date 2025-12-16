@@ -150,6 +150,7 @@ def load_checkpoint(model, ckpt_path, device, dtype=None, use_ema=True):
         checkpoint = load_file(ckpt_path)
     else:
         checkpoint = torch.load(ckpt_path, weights_only=True)
+        # breakpoint()
 
     if use_ema:
         if ckpt_type == "safetensors":

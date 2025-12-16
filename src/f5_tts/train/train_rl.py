@@ -18,6 +18,7 @@ mel_spec_type = "vocos"  # 'vocos' or 'bigvgan'
 tokenizer = "pinyin"  # 'pinyin', 'char', or 'custom'
 tokenizer_path = None  # if tokenizer = 'custom', define the path to the tokenizer you want to use (should be vocab.txt)
 dataset_name = "RL_ZH"
+dataset_name = "WenetSpeech4TTS_Premium"
 
 # -------------------------- Training Settings -------------------------- #
 
@@ -47,6 +48,7 @@ model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_lay
 def main():
     if tokenizer != "custom":
         tokenizer_path = dataset_name
+        tokenizer_path = "WenetSpeech4TTS_Basic"
     vocab_char_map, vocab_size = get_tokenizer(tokenizer_path, tokenizer)
 
     mel_spec_kwargs = dict(

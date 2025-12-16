@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     tokenizer = "pinyin"  # "pinyin" | "char"
     polyphone = True
-    dataset_choice = 1  # 1: Premium, 2: Standard, 3: Basic
+    dataset_choice = 3  # 1: Premium, 2: Standard, 3: Basic
 
     dataset_name = (
         ["WenetSpeech4TTS_Premium", "WenetSpeech4TTS_Standard", "WenetSpeech4TTS_Basic"][dataset_choice - 1]
@@ -105,9 +105,9 @@ if __name__ == "__main__":
         + tokenizer
     )
     dataset_paths = [
-        "<SOME_PATH>/WenetSpeech4TTS/Basic",
-        "<SOME_PATH>/WenetSpeech4TTS/Standard",
-        "<SOME_PATH>/WenetSpeech4TTS/Premium",
+        "/workspace/download/WenetSpeech4TTS/Basic",
+        "/workspace/download/WenetSpeech4TTS/Standard",
+        "/workspace/download/WenetSpeech4TTS/Premium",
     ][-dataset_choice:]
     save_dir = str(files("f5_tts").joinpath("../../")) + f"/data/{dataset_name}"
     print(f"\nChoose Dataset: {dataset_name}, will save to {save_dir}\n")

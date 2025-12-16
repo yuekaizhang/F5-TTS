@@ -47,7 +47,7 @@ def main():
     parser.add_argument("-s", "--seed", default=None, type=int)
     parser.add_argument("-d", "--dataset", default="Emilia_ZH_EN")
     parser.add_argument("-n", "--expname", required=True)
-    parser.add_argument("-c", "--ckptstep", default=1200000, type=int)
+    parser.add_argument("-c", "--ckptstep", default=500000, type=int)
     parser.add_argument("-m", "--mel_spec_type", default="vocos", type=str, choices=["bigvgan", "vocos"])
 
     parser.add_argument("-nfe", "--nfestep", default=32, type=int)
@@ -77,7 +77,7 @@ def main():
     use_truth_duration = False
     no_ref_audio = False
 
-    if exp_name == "F5TTS_Base":
+    if "F5TTS_Base" in exp_name:
         model_cls = DiT
         model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
 
@@ -195,7 +195,7 @@ def main():
 
                     if ref_rms_list[i] < target_rms:
                         generated_wave = generated_wave * ref_rms_list[i] / target_rms
-                    torchaudio.save(f"{output_dir}/{utts[i]}.wav", generated_wave.squeeze(0).cpu(), target_sample_rate)
+                    torchaudio.save(f"{output_dir}/{utts[i]}.wav", generated_wave.cpu(), target_sample_rate)
 
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:
